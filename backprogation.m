@@ -1,11 +1,9 @@
-function correct = backprogation(P,T,l_rate)
+function correct = backprogation(P,T,l_rate,nneuron, epoches)
     % Initializing variables
     correct = 0;
-    nneuron = 1;
     [IRow,~] = size(P);
     [~,TCol] = size(T);
-    
-    mse  = 50;
+
     %Random Weight Generation:
     W1 = zeros(nneuron, IRow);
     b1 = zeros(nneuron,1);
@@ -27,12 +25,9 @@ function correct = backprogation(P,T,l_rate)
         end
         b2(row,1) = rand(1);
     end
-
+    
     %Forward Propagation
-    for i = 0: 2000
-        if mse == 50
-            mse = 0;
-        end
+    for epoch = 0: epoches
         t = 0;
         for p = P
             t = t + 1;
@@ -62,8 +57,7 @@ function correct = backprogation(P,T,l_rate)
            
         end
     end
-
-  
+    
     %For Determining the number of correct output
     t = 0;
     for p = P
