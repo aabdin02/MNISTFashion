@@ -1,0 +1,48 @@
+%Pattern Classification:
+P = xlsread('train13.xlsx'); %(R,C) R = number of input C = size of inputs
+P(:,1) = [] ;%Remove the Indexs
+T = P(:,1)  ;
+P(:,1) = [] ;%Remove the targets
+
+[IRow,~] = size(P);
+epoches = 2%00; %zeros(20);
+nneuron = 2%00;
+
+%Between [0 - 1]
+n_test = 10%0;
+l_rates = rand(1,n_test);
+accurracy = zeros(n_test,1);
+index = 1;
+
+%backprogation(P,T,l_rate,nneuron, epoches)
+for l_rate = l_rates
+    correct = backprogation(P',T,l_rate,nneuron, epoches);
+    accurracy(index) = correct / IRow;
+    index = index + 1;
+end
+s
+scatter(l_rates,accurracy', 'b-o');
+xlabel('Learning Rate');
+ylabel('Percent Accuracy');
+legend('0 pixels');
+title('Learning Rates VS Percent Accuracy');
+
+%Between [0 - 100]
+l_rates = randperm(100,n_test);
+accurracy = zeros(n_test,1);
+index = 1;
+
+%backprogation(P,T,l_rate,nneuron, epoches)
+for l_rate = l_rates
+    correct = backprogation(P',T,l_rate,nneuron, epoches);
+    accurracy(index) = correct / IRow;
+    index = index + 1;
+end
+figure(2);
+size(l_rates)
+size(accurracy)
+scatter(l_rates, accurracy');
+xlabel('Learning Rate');
+ylabel('Percent Accuracy');
+legend('0 pixels');
+title('Learning Rates VS Percent Accuracy');
