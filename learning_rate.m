@@ -1,5 +1,4 @@
-%This is to determine the best learning rate
-function l_rates = learning_rate(P,T)
+function l_rate = learning_rate(P,T)    
     [IRow,~] = size(P);
     epoches = 200; %zeros(20);
     nneuron = 200;
@@ -23,7 +22,7 @@ function l_rates = learning_rate(P,T)
     title('Learning Rates VS Percent Accuracy');
 
     %Between [0 - 100]
-    l_rates = randperm(100,n_test);
+    l_rates = randperm(100,n_test) ;
     accurracy = zeros(n_test,1);
     index = 1;
 
@@ -35,8 +34,7 @@ function l_rates = learning_rate(P,T)
     end
 
     figure(2);
-    size(l_rates)
-    size(accurracy)
+    
     scatter(l_rates, accurracy');
     xlabel('Learning Rate');
     ylabel('Percent Accuracy');

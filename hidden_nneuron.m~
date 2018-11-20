@@ -1,0 +1,4 @@
+function nneuron = hidden_nneuron(P,T,nneuron)
+    [IRow,~] = size(P);
+    epoches = 200; %zeros(20);
+    
