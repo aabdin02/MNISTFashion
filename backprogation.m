@@ -1,4 +1,4 @@
-function correct = backprogation(P,T,l_rate,nneuron, epoches)
+function [correct,W1,b1,W2,b2] = backprogation(P,T,l_rate,nneuron, epoches)
     % Initializing variables
     correct = 0;
     [IRow,~] = size(P);
@@ -65,7 +65,7 @@ function correct = backprogation(P,T,l_rate,nneuron, epoches)
         a1 = satlin(W1 * a0 + b1);
         a2 = round(poslin(W2 * a1 + b2));
         t = t + 1;
-        error = T(t,:)- a2
+        error = T(t,:)- a2;
         if error == 0
             correct = correct + 1;
         end
