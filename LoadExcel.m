@@ -1,5 +1,7 @@
 %Pattern Classification:
+size = 2000;
 P = xlsread('train13.xlsx'); %(R,C) R = number of input C = size of inputs
+P = P(1:size,:);
 P(:,1) = [] ;%Remove the Indexs
 T = P(:,1)  ;
 P(:,1) = [] ;%Remove the targets
