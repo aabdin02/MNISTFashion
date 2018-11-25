@@ -1,30 +1,6 @@
-function [correct,W1,b1,W2,b2] = backprogation(P,T,l_rate,nneuron, epoches)
+function correct = backprogation(P,T,W1,W2,b1,b2,l_rate,nneuron, epoches,batch_size)
     % Initializing variables
     correct = 0;
-    [IRow,~] = size(P);
-    [~,TCol] = size(T);
-
-    %Random Weight Generation:
-    W1 = zeros(nneuron, IRow);
-    b1 = zeros(nneuron,1);
-
-    W2 = zeros(TCol,nneuron);
-    b2 = zeros(TCol,1);
-
-    %For Layer 1
-    for row = 1: nneuron
-        for col = 1: IRow
-            W1(row,col) = rand(1);
-        end
-        b1(row,1) = rand(1);
-    end
-    %For Layer 2
-    for row = 1: TCol
-        for col = 1: nneuron
-            W2(row,col) = rand(1);
-        end
-        b2(row,1) = rand(1);
-    end
     
     %Forward Propagation
     for epoch = 0: epoches
@@ -40,21 +16,22 @@ function [correct,W1,b1,W2,b2] = backprogation(P,T,l_rate,nneuron, epoches)
             error = T(t,:)- a2;
 
             %3. Backward Propagation (Sentivity Calculations)
-            %Calculating Sentivity for layer #2
-            F2deri = dposlin(a2);
-            s2 = -2 * diag(F2deri) *error;
-            % Sentivity for layer #1
-            F1deri = dsatlin(a1);
-            s1 = diag(F1deri) * W2' * s2;
+            if mod(t,batch_size) == 0
+                %Calculating Sentivity for layer #2
+                F2deri = dposlin(a2);
+                s2 = -2 * diag(F2deri) *error;
+                % Sentivity for layer #1
+                F1deri = dsatlin(a1);
+                s1 = diag(F1deri) * W2' * s2;
 
-            %4. Approximate Steepest Descent
-            % Weight Update
-            W2 = W2 - l_rate * s2 * a1';
-            W1 = W1 - l_rate * s1 * a0';
-            % Bias Update
-            b2 = b2 - l_rate * s2;
-            b1 = b1 - l_rate * s1;
-           
+                %4. Approximate Steepest Descent
+                % Weight Update
+                W2 = W2 - l_rate * s2 * a1';
+                W1 = W1 - l_rate * s1 * a0';
+                % Bias Update
+                b2 = b2 - l_rate * s2;
+                b1 = b1 - l_rate * s1;
+            end
         end
     end
     
