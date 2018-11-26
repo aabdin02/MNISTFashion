@@ -1,20 +1,25 @@
-function epoches = epoches(P,T,l_rate, nneurons)
-    [IRow,~] = size(P);
-    
-    n_test = 200;
+function best_epoche = epoches(P,T,l_rate,W1,W2,b1,b2,batch_size)
+    best_epoche = 0;
+    n_test = 20;
     %Between [0 - 100]
-    epoches = randperm(300,n_test) ;
+    epoche = randperm(200,n_test) ;
     accurracy = zeros(n_test,1);
     index = 1;
-
+    [IRow,~] = size(P);
+    
+    
     %backprogation(P,T,l_rate,nneuron, epoches)
-    for epoch = epoches
-        correct = backprogation(P',T,l_rate,nneurons, epoch);
+    for epoch = epoche
+        correct = backprogation(P',T,W1,W2,b1,b2,l_rate,epoch,batch_size);
+        if correct > best_epoche
+            best_epoche = correct;
+        end
         accurracy(index) = correct / IRow;
         index = index + 1;
     end
     
-    scatter(epoches', accurracy');
+    scatter(epoche', accurracy');
     xlabel('Number of epoches');
     ylabel('Percent Accuracy');
-    title('Number of Epoches VS Percent Accuracy');
+    
+    title(sprintf('%s %d','Number of Epoches VS Percent Accuracy With ',batch_size));

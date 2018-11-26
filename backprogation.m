@@ -1,27 +1,29 @@
-function correct = backprogation(P,T,W1,W2,b1,b2,l_rate,nneuron, epoches,batch_size)
+function correct = backprogation(P,T,W1,W2,b1,b2,l_rate, epoches,batch_size)
     % Initializing variables
     correct = 0;
-    
+   
     %Forward Propagation
     for epoch = 0: epoches
         t = 0;
+        error = 0;
         for p = P
             t = t + 1;
             %1. Forward Propagation
             a0 = P(:,t);
-            a1 = satlin(W1 * a0 + b1);
+            n1 = W1 * a0 + b1;
+            a1 = satlin(n1);
             a2 = round(poslin(W2 * a1 + b2));
 
             %2. Error Calculation
-            error = T(t,:)- a2;
+            error = error + (T(t,:)- a2);
 
             %3. Backward Propagation (Sentivity Calculations)
             if mod(t,batch_size) == 0
                 %Calculating Sentivity for layer #2
                 F2deri = dposlin(a2);
-                s2 = -2 * diag(F2deri) *error;
+                s2 = -2 * diag(F2deri) * error/batch_size;
                 % Sentivity for layer #1
-                F1deri = dsatlin(a1);
+                F1deri = dsatlin(n1,a1);
                 s1 = diag(F1deri) * W2' * s2;
 
                 %4. Approximate Steepest Descent
@@ -31,6 +33,7 @@ function correct = backprogation(P,T,W1,W2,b1,b2,l_rate,nneuron, epoches,batch_s
                 % Bias Update
                 b2 = b2 - l_rate * s2;
                 b1 = b1 - l_rate * s1;
+                error = 0;
             end
         end
     end
