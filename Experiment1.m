@@ -16,7 +16,8 @@ rng(1);
 c = cvpartition(n, 'Holdout', n/3);
 
 Xtrain = inputs(:, training(c));
-Ytrain = targetsd (:, training(c));
+Ytrain = targetsd(:, training(c));
+
 Xtest = inputs(:, test(c));
 Ytest = targets(test(c));
 Ytestd = targetsd(:, test(c));
@@ -25,15 +26,15 @@ Ytestd = targetsd(:, test(c));
 Ypred = myNNfun(Xtest);
 Ypred(:,1:5);
 [~,Ypred] = max(Ypred);
-sum(Ytest == Ypred) / length(Ytest);
+sum(Ytest == Ypred) / length(Ytest)
 
-sweep = [250];
+sweep = [300];
 scores = zeros(length(sweep), 1);
 models = cell(length(sweep), 1);
 
 x = Xtrain;
 t = Ytrain;
-trainFcn = 'logsig';
+trainFcn = 'softmax';
 
 for i = 1: length(sweep)
     hiddenLayerSize = sweep(i);
@@ -52,3 +53,11 @@ end
 n = size(sub,1);
 sub = sub';
 [~,highest] = max(scores);
+net = models{highest};
+Ypred = net(sub);
+[~,Label] = max(Ypred);
+Label = Label';
+Label(Label == 10) = 0;
+ImageId = 1:n; ImageId = ImageId';
+writetable(table(ImageId, Label), 'submission.csv');
+
